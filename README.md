@@ -1,7 +1,7 @@
 # Difficulty-Net: Learning to Predict Difficulties for Long-Tailed Recognition
 ____
 
-This contains the code to reproduce the proposed method on long-tailed datasets. 
+This contains the code for our WACV 2023 paper. 
 
 ### Requirements
 ___
@@ -80,7 +80,7 @@ Put the respective dataset and model name in ```{dataset}``` and ```{model}``` r
 [MiSLAS]: https://github.com/dvlab-research/MiSLAS
 [ImageNet]: https://image-net.org/index.php
 [PLaces]: http://places2.csail.mit.edu/index.html
-[CDB-CE]: https://github.com/hitachi-rd-cv/CDB-loss 
+[CDB-CE]: https://github.com/hitachi-rd-cv/CDB-loss
 [here]: https://www.cs.toronto.edu/~kriz/cifar.html
 
 
