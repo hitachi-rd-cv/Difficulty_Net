@@ -1,7 +1,7 @@
 # Difficulty-Net: Learning to Predict Difficulties for Long-Tailed Recognition
 ____
 
-This contains the code for our WACV 2023 paper. 
+This contains the code for our WACV 2023 paper [arXiv]. 
 
 ### Requirements
 ___
@@ -82,6 +82,9 @@ Put the respective dataset and model name in ```{dataset}``` and ```{model}``` r
 [PLaces]: http://places2.csail.mit.edu/index.html
 [CDB-CE]: https://github.com/hitachi-rd-cv/CDB-loss
 [here]: https://www.cs.toronto.edu/~kriz/cifar.html
+[arXiv]: https://github.com/hitachi-rd-cv/Difficulty_Net
+
+
 
 
 
