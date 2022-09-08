@@ -1,7 +1,7 @@
 # Difficulty-Net: Learning to Predict Difficulties for Long-Tailed Recognition
 ____
 
-This contains the code for our WACV 2023 paper [arXiv]. 
+This contains the code for our WACV 2023 paper available at [arXiv]. 
 
 ### Requirements
 ___
