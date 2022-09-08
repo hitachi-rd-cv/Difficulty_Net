@@ -70,6 +70,8 @@ python eval.py --cfg config/{dataset}/{dataset}_{model}_stage2.yaml resume saved
 ```
 Put the respective dataset and model name in ```{dataset}``` and ```{model}``` respectively.  Currently, this code is only supported for ```resnet10 ``` and ```resnet50``` on ```imagenet``` and ```resnet152``` on ```places```. 
 
+If you use our code, please consider citing us. For queries, contact at saptarshi.sinha@bristol.ac.uk
+
 ### References:
 1. Zhong et. al., Improving Calibration for Long-Tailed Recognition, CVPR 2021
 2. Sinha et. al., Class-Wise Difficulty-Balanced Loss for Solving Class-Imbalance, ACCV 2020
