@@ -107,7 +107,7 @@ def train(model, model_cpy, mwnet, dataloaders, args):
        #bce_loss = torch.nn.BCEWithLogitsLoss(reduction='none').cuda()
        #bce_loss = torch.nn.BCELoss(reduction='none').cuda()
    elif args.loss_type == 'FL':
-       loss = FocalLoss(gamma=args.gamma, size_average=False).cuda()
+       loss = FocalLoss(gamma=args.gamma, reduction='none').cuda()
    elif args.loss_type == 'EQL':
        loss = EQLloss(args.freq_ratio, gamma=args.eql_gamma, lamda=args.eql_lambda).cuda()
    elif args.loss_type == 'CDB-CE':
