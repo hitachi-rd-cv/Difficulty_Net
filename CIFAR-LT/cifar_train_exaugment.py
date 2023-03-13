@@ -100,7 +100,7 @@ def train(model, model_cpy, mwnet, dataloaders, args):
    
    ## create loss
    mseloss = torch.nn.MSELoss().cuda()
-   if args.loss_type == 'CE':
+   if args.loss_type == 'CE w/ ours':
        loss = torch.nn.CrossEntropyLoss(reduction='none').cuda()
    elif args.loss_type == 'Balanced_Softmax':
        loss = BalancedSoftmax(args.freq_ratio).cuda()
@@ -126,6 +126,7 @@ def train(model, model_cpy, mwnet, dataloaders, args):
    valloader = dataloaders['val']
    metaloader = dataloaders['meta']
    best_val_accuracy = 0
+   best_test_accuracy = 0
    best_val_loss = np.inf
    class_weights = torch.ones(args.class_num).cuda()
    class_wise_accuracy = torch.zeros(args.class_num).cuda()
@@ -211,8 +212,8 @@ def train(model, model_cpy, mwnet, dataloaders, args):
             
      
       
-      #model_cpy.load_state_dict(copy.deepcopy(model.state_dict()))
-         model_cpy.eval()
+      
+         #model_cpy.eval()
       #model.train()
          mwnet.eval()
          with torch.no_grad():
@@ -277,36 +278,16 @@ def train(model, model_cpy, mwnet, dataloaders, args):
             #cdb_weights = compute_weights(class_weights, tau = args.tau, normalize = args.normalize)
             loss = CDB_loss(class_difficulty=wt, tau=args.tau).cuda()
       val_accuracy = class_wise_accuracy.mean()
+      if val_accuracy > best_val_accuracy:
+             best_val_accuracy = val_accuracy
+             torch.save(model.state_dict(), os.path.join(args.save_model, 'best_cifar{}_{}_loss_{}_imbalance{}_ce_stage1.pth'.format(args.class_num, args.model, args.loss_type, args.imbalance)))
       logging.info('Validation: val accuracy = %.4f' % (val_accuracy))
       test_accuracy = test(model, dataloaders)
-      if test_accuracy > best_val_accuracy:
-             best_val_accuracy = test_accuracy
+      if test_accuracy > best_test_accuracy:
+             best_test_accuracy = test_accuracy
              logging.info('Best accuracy = %.4f' % (test_accuracy))
+      
 
-
-def validate(model, mwnet, dataloaders, args):
-     model.eval()
-     mwnet.train()
-     val_total = 0
-     class_wise_accuracy = np.zeros(args.class_num)
-     #validation_loss = nn.CrossEntropyLoss().cuda()
-     valloader = dataloaders['val']
-     for val_images, val_labels in valloader:
-          val_images = val_images.cuda()
-          val_labels = val_labels.type(torch.cuda.LongTensor)
-          with torch.no_grad():
-               out, _ = model(val_images)
-               #for i in range(len(val_labels)):
-               #   features[val_labels[i].item()] += out1[i] 
-          _, val_predicted = out.max(1)
-          val_total += val_labels.size(0)
-          for id in range(len(val_predicted)): 
-             if val_predicted[id] == val_labels[id]:
-                 class_wise_accuracy[int(val_predicted[id])] += 1
-     
-     class_wise_accuracy = class_wise_accuracy/args.val_samples_per_class
-
-     return class_wise_accuracy
 
 def test(model, dataloaders):
    
@@ -332,22 +313,14 @@ def test(model, dataloaders):
     return test_correct/test_total 
 
 
-def compute_distance(features, args):
-    distance = torch.zeros(args.class_num, args.class_num).cuda()
-    for i in range(args.class_num):
-        for j in range(i, args.class_num):
-            #dist = torch.norm(features[i] - features[j], p=2)
-            dist = torch.dot(features[i], features[j])
-            distance[i,j] = dist
-            distance[j,i] = dist
-    return distance
+
 
 def main():
     parser = argparse.ArgumentParser(description='Input parameters for CIFAR-LT training')
     parser.add_argument('--class_num', type=int, default=100, help='number of classes (100 for CIFAR100)')
     parser.add_argument('--imbalance', type=int, default=200, help='imbalance ratios in [200, 100, 50, 20, 10, 1(no imbalance)]')
     parser.add_argument('--model', type=str, default='resnet32', help='[resnet32, vgg16]')
-    parser.add_argument('--loss_type', type=str, default='CE', help='[CE (CrossEntropy), Balanced_Softmax, EQL (EqualizationLoss), FL (FocalLoss), CDB-CE (Ours)]')
+    parser.add_argument('--loss_type', type=str, default='CE w/ ours', help='[CE w/ ours (CrossEntropy w/ Ours), Balanced_Softmax, EQL (EqualizationLoss), FL (FocalLoss), CDB-CE (Ours)]')
     parser.add_argument('--tau', type=str, default='1', help='[0.5, 1, 1.5, 2, 5, dynamic]')
     parser.add_argument('--lamda', type=float, default=0.3,)
     parser.add_argument('--gamma', type=float, default=1, help='only if you use focal loss')
