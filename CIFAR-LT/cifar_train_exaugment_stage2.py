@@ -238,7 +238,7 @@ def main():
     parser.add_argument('--imbalance', type=int, default=100, help='imbalance ratios in [200, 100, 50, 20, 10, 1(no imbalance)]')
 
     parser.add_argument('--stage_2_method', type=str, default='LAS', help='[CRT, LWS, LAS]')
-    parser.add_argument('--stage1_trained_model', type=str, default='./saved_model/best_cifar100_resnet32_loss_CE_imbalance200_exaugment_lambda0.3_no_metaloss.pth')
+    parser.add_argument('--stage1_trained_model', type=str, default='./saved_model/best_cifar100_resnet32_loss_Difficulty_net_imbalance200_stage1.pth')
     parser.add_argument('--save_model', type=str, default='./saved_model/')
     parser.add_argument('--validate_after_every', type=int, default=1, help='validate after every n epochs')
     parser.add_argument('--n_gpus', type=int, default=1, help='number of gpus to use')
