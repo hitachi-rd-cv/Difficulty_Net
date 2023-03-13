@@ -14,13 +14,13 @@ import torch.nn.functional as F
 
 
 class EQLloss(nn.Module):
-    def __init__(self, freq_info):
+    def __init__(self, freq_info, gamma=0.95, lamda=0.03):
         super(EQLloss, self).__init__()
         self.freq_info = freq_info
         # self.pred_class_logits = pred_class_logits
         # self.gt_classes = gt_classes
-        self.lambda_ = 0.03
-        self.gamma = 0.95
+        self.lambda_ = lamda
+        self.gamma = gamma
     def threshold_func(self):
         # class-level weight
         weight = self.pred_class_logits.new_zeros(self.n_c)
