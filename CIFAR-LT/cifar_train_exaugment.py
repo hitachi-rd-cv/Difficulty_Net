@@ -280,7 +280,7 @@ def train(model, model_cpy, mwnet, dataloaders, args):
       val_accuracy = class_wise_accuracy.mean()
       if val_accuracy > best_val_accuracy:
              best_val_accuracy = val_accuracy
-             torch.save(model.state_dict(), os.path.join(args.save_model, 'best_cifar{}_{}_loss_{}_imbalance{}_ce_stage1.pth'.format(args.class_num, args.model, args.loss_type, args.imbalance)))
+             torch.save(model.state_dict(), os.path.join(args.save_model, 'best_cifar{}_{}_loss_{}_imbalance{}_stage1.pth'.format(args.class_num, args.model, args.loss_type, args.imbalance)))
       logging.info('Validation: val accuracy = %.4f' % (val_accuracy))
       test_accuracy = test(model, dataloaders)
       if test_accuracy > best_test_accuracy:
