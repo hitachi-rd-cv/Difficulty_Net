@@ -100,7 +100,7 @@ def train(model, model_cpy, mwnet, dataloaders, args):
    
    ## create loss
    mseloss = torch.nn.MSELoss().cuda()
-   if args.loss_type == 'CE w/ ours':
+   if args.loss_type == 'Difficulty_net':
        loss = torch.nn.CrossEntropyLoss(reduction='none').cuda()
    elif args.loss_type == 'Balanced_Softmax':
        loss = BalancedSoftmax(args.freq_ratio).cuda()
@@ -320,7 +320,7 @@ def main():
     parser.add_argument('--class_num', type=int, default=100, help='number of classes (100 for CIFAR100)')
     parser.add_argument('--imbalance', type=int, default=200, help='imbalance ratios in [200, 100, 50, 20, 10, 1(no imbalance)]')
     parser.add_argument('--model', type=str, default='resnet32', help='[resnet32, vgg16]')
-    parser.add_argument('--loss_type', type=str, default='CE w/ ours', help='[CE w/ ours (CrossEntropy w/ Ours), Balanced_Softmax, EQL (EqualizationLoss), FL (FocalLoss), CDB-CE (Ours)]')
+    parser.add_argument('--loss_type', type=str, default='Difficulty_net', help='[Difficulty_net, Balanced_Softmax, EQL (EqualizationLoss), FL (FocalLoss), CDB-CE (Ours)]')
     parser.add_argument('--tau', type=str, default='1', help='[0.5, 1, 1.5, 2, 5, dynamic]')
     parser.add_argument('--lamda', type=float, default=0.3,)
     parser.add_argument('--gamma', type=float, default=1, help='only if you use focal loss')
