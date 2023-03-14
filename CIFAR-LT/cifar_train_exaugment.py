@@ -79,7 +79,7 @@ def source_import(file_path):
     return module
 
 
-def train(model, model_cpy, mwnet, dataloaders, args):
+def train(model, mwnet, dataloaders, args):
    
    params_dict = dict(model.named_params(model))
    #print(params_dict.items())
@@ -93,7 +93,6 @@ def train(model, model_cpy, mwnet, dataloaders, args):
             params += [{'params':value, 'weight_decay':1e-4}]
 
    ## define optimizer and scheduler
-   interim_opt = torch.optim.SGD(model_cpy.parameters(), lr=0.1, weight_decay=5e-4, momentum=0.9)
    optimizer = torch.optim.SGD(params, lr=0.1, momentum=0.9)
    mwoptimizer = torch.optim.Adam(mwnet.params(), lr=1e-5, weight_decay=1e-4)
 
@@ -233,7 +232,7 @@ def train(model, model_cpy, mwnet, dataloaders, args):
          weights = weights.unsqueeze(0)
          weights = weights.repeat(labels_one_hot.shape[0],1) * labels_one_hot
          weights = weights.sum(1) 
-
+         optimizer.zero_grad()
 
          out= model(train_images)
          #train_loss = torch.mean(mixup_criterion(loss, out, targets_a, targets_b, lam, weights, indx))
@@ -354,20 +353,16 @@ def main():
     #   parameter.requires_grad = True
     #for parameter in model.classifier.parameters():
     #   parameter.requires_grad = True
-    model_cpy = resnet.resnet32()
-    model_cpy.linear = nn.Linear(in_features=64, out_features=args.class_num, bias=True)
-    model_cpy = nn.DataParallel(model_cpy, device_ids=range(args.n_gpus))
+    
     model = nn.DataParallel(model, device_ids=range(args.n_gpus))  #for using multiple gpus
     mwnet = VNet(args.class_num, 128, 128, args.class_num)
-    #mwnet = nn.DataParallel(MWNet(), device_ids=range(args.n_gpus))
-    #model.load_state_dict(torch.load('./saved_model/best1_cifar100_vgg16_imbalance100.pth'))
-    #model.module.classifier.reset_parameters()
+    
     model = build_model(args.class_num)
-    #model.linear.bias.data.fill_(b)
+    
 
-    #model = model.cuda()
+    
     mwnet = mwnet.cuda()
-    model_cpy = model_cpy.cuda()
+    
     
     print('model prepared')
    
@@ -476,7 +471,7 @@ def main():
 
     ### dataloader creation finished
 
-    train(model, model_cpy, mwnet, dataloaders, args)
+    train(model, mwnet, dataloaders, args)
     print('Training Finished')
 
 
