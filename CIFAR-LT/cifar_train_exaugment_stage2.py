@@ -240,6 +240,8 @@ def main():
     parser.add_argument('--stage_2_method', type=str, default='LAS', help='[CRT, LWS, LAS]')
     parser.add_argument('--stage1_trained_model', type=str, default='./saved_model/best_cifar100_resnet32_loss_Difficulty_net_imbalance200_stage1.pth')
     parser.add_argument('--save_model', type=str, default='./saved_model/')
+    parser.add_argument('--model', type=str, default='resnet32')
+    parser.add_argument('--loss_type', type=str, default='CE')
     parser.add_argument('--validate_after_every', type=int, default=1, help='validate after every n epochs')
     parser.add_argument('--n_gpus', type=int, default=1, help='number of gpus to use')
 
