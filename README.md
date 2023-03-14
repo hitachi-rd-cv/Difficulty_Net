@@ -25,7 +25,7 @@ Download the dataset from [here] and save it in the ```data/``` folder.
 To start stage-1 training, 
 
 ```
-python cifar_train_exaugment.py --imbalance 200 --loss_type CE --n_gpus 1 --lamda 0.3
+python cifar_train_exaugment.py --imbalance 200 --loss_type Difficulty_net --n_gpus 1 --lamda 0.3
 ```
 
 This starts the stage-1 training with Difficulty-Net based weighted CE loss. The imbalance variable can take values in {10, 20, 50, 100, 200}.
