@@ -113,7 +113,7 @@ def train(model, dataloaders, args):
            smooth_head, smooth_tail = 0.3, 0
        else:
            smooth_head, smooth_tail = 0.2, 0
-       loss = LabelAwareSmoothing(cls_num_list=args.cls_num_list, smooth_head=smooth_head,
+       loss = LabelAwareSmoothing(cls_num_list=args.class_num_list, smooth_head=smooth_head,
                            smooth_tail=smooth_tail).cuda()
    else:
        loss = torch.nn.CrossEntropyLoss(reduction='none').cuda()
