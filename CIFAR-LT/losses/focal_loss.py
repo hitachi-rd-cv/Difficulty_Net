@@ -40,6 +40,6 @@ class FocalLoss(nn.Module):
             logpt = logpt * Variable(at)
 
         loss = -1 * (1-pt)**self.gamma * logpt
-        if reduction == 'mean': return loss.mean()
-        elif reduction == 'sum': return loss.sum()
+        if self.reduction == 'mean': return loss.mean()
+        elif self.reduction == 'sum': return loss.sum()
         else: return loss
